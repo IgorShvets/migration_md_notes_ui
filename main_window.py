@@ -96,7 +96,10 @@ class MainWindow(QMainWindow):
         self.layout_menu_scan.addWidget(self.btn_scan_notes_folder)
         self.layout_table.addWidget(self.table_notes)
 
+        #create progress dialog
         self.progress_dialog: QProgressDialog = QProgressDialog()
+        self.progress_dialog.setMinimumDuration(999999)  # Никогда не показывать автоматически
+        self.progress_dialog.hide()  # Дополнительно скрыть
 
         #connect buttons to functions
         self.btn_open_notes_folder_dialog.clicked.connect(self.window_logic.open_notes_folder_dialog)

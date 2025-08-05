@@ -104,8 +104,6 @@ class MainWindowLogic:
         Args: folder_path - full folder path
         Returns: list[str] - folder list
         """
-        #recursive find all sub folders of folder_path
-        self.main_window.progress_dialog.setLabelText("Searching for sub folders with notes...")
         
         try:
             folder_list: list[str] = []
