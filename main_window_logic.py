@@ -38,6 +38,8 @@ class MainWindowLogic:
             if folder_path:
                 folder_path = os.path.normpath(folder_path)
                 self.main_window.txt_notes_folder_path.setText(folder_path)
+                self.auto_fill_save_folder_path()
+                self.auto_fill_attach_folder_path()
         except Exception as e:
             QMessageBox.warning(self.main_window, "Warning", "Error open notes folder dialog: " + str(e))
             raise e
@@ -104,19 +106,18 @@ class MainWindowLogic:
         """
         #recursive find all sub folders of folder_path
         self.main_window.progress_dialog.setLabelText("Searching for sub folders with notes...")
-        self.main_window.progress_dialog.show()
-        QApplication.processEvents()
+        
         try:
             folder_list: list[str] = []
             for root, dirs, _ in os.walk(folder_path):
                 for dir in dirs:
                     folder_list.append(os.path.join(root, dir))
             time.sleep(2)
-            self.main_window.progress_dialog.hide()
             return folder_list
         except Exception as e:
             QMessageBox.warning(self.main_window, "Warning", "Error get folder list from folder: " + str(e))
             raise e
+
 
     def get_file_list_from_folder(self, folder_path: str)-> list[str]:
         """

@@ -14,6 +14,7 @@ from PySide6.QtWidgets import QHBoxLayout
 #import dialogs
 from PySide6.QtWidgets import QProgressDialog
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QFocusEvent
 #import other modules
 from note_windows import NoteWindow
 from main_window_logic import MainWindowLogic
@@ -95,15 +96,12 @@ class MainWindow(QMainWindow):
         self.layout_menu_scan.addWidget(self.btn_scan_notes_folder)
         self.layout_table.addWidget(self.table_notes)
 
-        #progress dialog 
         self.progress_dialog: QProgressDialog = QProgressDialog()
-        self.progress_dialog.setWindowModality(Qt.ApplicationModal)
-        self.progress_dialog.setCancelButton(None)
 
         #connect buttons to functions
         self.btn_open_notes_folder_dialog.clicked.connect(self.window_logic.open_notes_folder_dialog)
-        self.txt_notes_folder_path.textChanged.connect(self.window_logic.auto_fill_save_folder_path)
-        self.txt_notes_folder_path.textChanged.connect(self.window_logic.auto_fill_attach_folder_path)
+        self.txt_notes_folder_path.returnPressed.connect(self.window_logic.auto_fill_attach_folder_path)
+        self.txt_notes_folder_path.returnPressed.connect(self.window_logic.auto_fill_save_folder_path)
         self.btn_open_save_folder_dialog.clicked.connect(self.window_logic.open_save_folder_dialog)
         self.btn_attach_notes_folder.clicked.connect(self.window_logic.attach_joplin_folder_dialog)
         self.btn_scan_notes_folder.clicked.connect(self.window_logic.start_check_joplin_folder)
@@ -142,3 +140,4 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.warning(self, "Warning", "Error table item double clicked: " + str(e))
             raise e
+
