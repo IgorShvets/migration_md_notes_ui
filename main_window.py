@@ -11,10 +11,7 @@ from PySide6.QtWidgets import QMessageBox
 #import layouts
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QHBoxLayout
-#import dialogs
-from PySide6.QtWidgets import QProgressDialog
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QFocusEvent
+
 #import other modules
 from note_windows import NoteWindow
 from main_window_logic import MainWindowLogic
@@ -96,10 +93,6 @@ class MainWindow(QMainWindow):
         self.layout_menu_scan.addWidget(self.btn_scan_notes_folder)
         self.layout_table.addWidget(self.table_notes)
 
-        #create progress dialog
-        self.progress_dialog: QProgressDialog = QProgressDialog()
-        self.progress_dialog.setMinimumDuration(999999)  # Никогда не показывать автоматически
-        self.progress_dialog.hide()  # Дополнительно скрыть
 
         #connect buttons to functions
         self.btn_open_notes_folder_dialog.clicked.connect(self.window_logic.open_notes_folder_dialog)
@@ -111,22 +104,7 @@ class MainWindow(QMainWindow):
         #connect table to functions
         self.table_notes.itemDoubleClicked.connect(self.table_item_double_clicked)
    
-    #create function get markdown attach from .md file
-    def get_markdown_attach_from_md_file(self, md_file_path: str)-> list[str]:
-        """
-        Get markdown attach from .md file
-        Args: md_file_path - full md file path
-        Returns: list[str] - attach list
-        """
-        try:
-            with open(md_file_path, "r", encoding="utf-8") as file:
-                md_content: str = file.read()
-                #get all attach from md content
-                attach_list: list[str] = re.findall(r"!\[.*?\]\((.*?)\)", md_content)
-                return attach_list
-        except Exception as e:
-            QMessageBox.warning(self, "Warning", "Error get markdown attach from md file: " + str(e))
-            raise e
+    
 
     #create function table item double clicked
     def table_item_double_clicked(self, item: QTableWidgetItem):

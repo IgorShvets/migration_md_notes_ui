@@ -1,8 +1,9 @@
 from msvcrt import get_osfhandle
 import os
+import re
 #import PySide6 widgets
 from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QTableWidgetItem
 #
 import time
 
@@ -214,10 +215,26 @@ class MainWindowLogic:
                     #get attach count
                     attach_count: int = len(attach_list)
                     #add note to table
-                    self.table_notes.insertRow(0)
-                    self.main_window.table_notes.setItem(0, 0, self.main_window.QTableWidgetItem(file))
-                    self.main_window.table_notes.setItem(0, 1, self.main_window.QTableWidgetItem(os.path.join(joplin_folder_path, file)))
-                    self.main_window.table_notes.setItem(0, 2, self.main_window.QTableWidgetItem(str(attach_count)))
+                    self.main_window.table_notes.insertRow(0)
+                    self.main_window.table_notes.setItem(0, 0, QTableWidgetItem(file))
+                    self.main_window.table_notes.setItem(0, 1, QTableWidgetItem(os.path.join(joplin_folder_path, file)))
+                    self.main_window.table_notes.setItem(0, 2, QTableWidgetItem(str(attach_count)))
         except Exception as e:
-            QMessageBox.warning(self, "Warning", "Error fill table with joplin notes: " + str(e))
+            QMessageBox.warning(self.main_window, "Warning", "Error fill table with joplin notes: " + str(e))
+            raise e
+
+    def get_markdown_attach_from_md_file(self, md_file_path: str)-> list[str]:
+        """
+        Get markdown attach from .md file
+        Args: md_file_path - full md file path
+        Returns: list[str] - attach list
+        """
+        try:
+            with open(md_file_path, "r", encoding="utf-8") as file:
+                md_content: str = file.read()
+                #get all attach from md content
+                attach_list: list[str] = re.findall(r"!\[.*?\]\((.*?)\)", md_content)
+                return attach_list
+        except Exception as e:
+            QMessageBox.warning(self.main_window, "Warning", "Error get markdown attach from md file: " + str(e))
             raise e
